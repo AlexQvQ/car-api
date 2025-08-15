@@ -17,12 +17,14 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required'],
+            'vacancy' => ['required', 'string', 'max:255'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'vacancy_id' => Vacancy::where('name', $request->vacancy)->first()->id,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -56,7 +58,7 @@ class AuthController extends Controller
         ]);
     }
     public function logout(Request $request){
-        $request->user->tokens->delete();
+        $request->user()->tokens()->delete();
         return response()->json([
             'message' => 'bye'
         ]);

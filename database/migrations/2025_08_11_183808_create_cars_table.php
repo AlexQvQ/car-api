@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('mark');
+            $table->boolean('is_reserv');
             $table->timestamps();
             $table->foreignIdFor(ComfortClass::class);
             $table->foreignIdFor(Driver::class);

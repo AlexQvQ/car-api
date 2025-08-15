@@ -16,6 +16,11 @@ class Car extends Model
         return $this->hasTo(ComfortClass::class);
     }
 
+    public function requests()
+    {
+        return $this->hasMany(Request::class);
+    }
+
     public function driver()
     {
         return $this->hasOne(Driver::class);

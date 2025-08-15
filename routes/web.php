@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CarController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('auth');
+})->name('loginPage');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+Route::get('/register', function () {
+    return view('register');
+})->name('registerPage');
+
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+
+Route::get('/main', [CarController::class, 'index']);

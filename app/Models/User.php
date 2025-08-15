@@ -52,9 +52,14 @@ class User extends Authenticatable
         return $this->belongsToMany(Car::class, 'car_user');
     }
 
+    public function requests()
+    {
+        return $this->hasMany(Request::class);
+    }
+
     public function vacancy()
     {
-        return $this->hasOne(Vacancy::class);
+        return $this->belongsTo(Vacancy::class);
     }
 
 }
