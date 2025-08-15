@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $request){
-
+    public function register(Request $request)
+    {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -19,16 +19,28 @@ class AuthController extends Controller
             'vacancy' => ['required', 'string', 'max:255'],
         ]);
 
+        $vacancy = Vacancy::where('name', $request->vacancy)->first();
+
+        if ($vacancy) {
+            $vacancyId = $vacancy->id;
+        } else {
+            $vacancy = Vacancy::create([
+            'name' => $request->vacancy
+            ]);
+            $vacancyId = $vacancy->id;
+        }
+
         User::create($validated = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'vacancy_id' => Vacancy::where('name', $request->vacancy)->first()->id,
+            'vacancy_id' => $vacancyId,
         ]);
         return redirect('/');
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
 
         $validated = $request->validate([
             'email' => 'required',
@@ -47,7 +59,8 @@ class AuthController extends Controller
 
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
 
         Auth::logout();
 

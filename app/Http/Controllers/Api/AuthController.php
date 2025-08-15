@@ -20,11 +20,22 @@ class AuthController extends Controller
             'vacancy' => ['required', 'string', 'max:255'],
         ]);
 
+        $vacancy = Vacancy::where('name', $request->vacancy)->first();
+
+        if ($vacancy) {
+            $vacancyId = $vacancy->id;
+        } else {
+            $vacancy = Vacancy::create([
+            'name' => $request->vacancy
+            ]);
+            $vacancyId = $vacancy->id;
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'vacancy_id' => Vacancy::where('name', $request->vacancy)->first()->id,
+            'vacancy_id' => $vacancyId,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
